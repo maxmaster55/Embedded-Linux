@@ -41,3 +41,26 @@
    8. ```bash 
       ls /usr/bin/w*
       ```
+   
+   9. Displays the type of command the shell will execute.
+   
+   10. to show the locations the cp is in
+   
+      ```bash
+      type -a cp 
+      ```
+   
+      this will output this:
+   
+      ```text
+      cp is /usr/bin/cp
+      cp is /bin/cp
+      ```
+   
+   11. ```bash 
+       man -K "read file"
+       ```
+   
+   12. **apropus** is used to search in the man pages for "names and descriptions" .
+
+​	
