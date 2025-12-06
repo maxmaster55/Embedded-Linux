@@ -1,12 +1,6 @@
-#include <memory>
+#include "Display.h"
 
 
-using namespace std;
-
-class Display
-{
-private:
-
-public:
-    void displayTemp();
-};
+void Display::displayTemp(){
+    
+}

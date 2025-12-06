@@ -2,13 +2,13 @@
 #include <memory>
 #include "tempData.h"
 
+
 using namespace std;
 
-class Logger
+class Display
 {
 private:
-    
+
 public:
-    Logger(shared_ptr<TempData> td_ptr);
-    ~Logger();
+    void displayTemp(shared_ptr<TempData> data);
 };

@@ -1,12 +1,12 @@
 #pragma once
 
 
-class TempDate
+class TempData
 {
 private:
     float data;
 public:
-    TempDate();
+    TempData();
     float read_temp();
-    ~TempDate();
+    ~TempData();
 };

@@ -1,9 +1,9 @@
 #include <tempData.h>
 
-TempDate::TempDate()
+TempData::TempData()
 {
 }
 
-TempDate::~TempDate()
+TempData::~TempData()
 {
 }
