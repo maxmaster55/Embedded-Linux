@@ -14,17 +14,19 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
     
-    shared_ptr<TempData> temp(new TempData);
     unique_ptr<LM_Sensor> sensor(new LM_Sensor(1));
+    shared_ptr<TempData> temp(new TempData);
 
     Logger logger;
     Display screen;
 
     while (true)
     {
+        cout << "start \n";
+        temp->setTemp(sensor->read_sensor());
         screen.displayTemp(temp);
         logger.logTemp(temp);
-        
+        sleep(1);
     }
 
 

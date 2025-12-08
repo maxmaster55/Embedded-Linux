@@ -1,0 +1,96 @@
+#include <Wire.h>
+
+const int SENSOR_PIN = A0;
+const int I2C_ADDRESS = 0x48;  // Try 0x48, 0x76 if this doesn't work
+const int LED_PIN = LED_BUILTIN;
+int last_adc_value = 0;
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);  // Wait for serial
+  
+  Serial.println("\n\nESP8266 I2C Temperature Sensor");
+  Serial.println("==============================");
+  
+  // Initialize LED
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH); // LED off
+  
+  // IMPORTANT: Initialize I2C as slave FIRST
+  Wire.begin(I2C_ADDRESS);
+  
+  // Register callback
+  Wire.onRequest(requestEvent);
+  
+  // Test I2C pins
+  pinMode(SDA, INPUT_PULLUP);
+  pinMode(SCL, INPUT_PULLUP);
+  
+  Serial.print("SDA pin: GPIO");
+  Serial.println(SDA);
+  Serial.print("SCL pin: GPIO");
+  Serial.println(SCL);
+  Serial.print("I2C Address: 0x");
+  Serial.println(I2C_ADDRESS, HEX);
+  
+  // Blink pattern: 3 fast, pause, 3 slow = "I2C ready"
+  for(int i=0; i<3; i++) {
+    digitalWrite(LED_PIN, LOW);
+    delay(100);
+    digitalWrite(LED_PIN, HIGH);
+    delay(100);
+  }
+  delay(500);
+  for(int i=0; i<3; i++) {
+    digitalWrite(LED_PIN, LOW);
+    delay(300);
+    digitalWrite(LED_PIN, HIGH);
+    delay(300);
+  }
+  
+  Serial.println("Setup complete. Waiting for I2C requests...");
+}
+
+void loop() {
+  // Read sensor
+  last_adc_value = analogRead(SENSOR_PIN);
+  
+  // Slow blink to show it's alive
+  static unsigned long last_blink = 0;
+  if(millis() - last_blink > 2000) {
+    last_blink = millis();
+    digitalWrite(LED_PIN, LOW);
+    delay(50);
+    digitalWrite(LED_PIN, HIGH);
+    
+    // Print status every 2 seconds
+    float voltage = last_adc_value * (3.3 / 1024.0);
+    float temp = voltage * 100.0;
+    
+    Serial.print("Status: ADC=");
+    Serial.print(last_adc_value);
+    Serial.print(" (");
+    Serial.print(temp);
+    Serial.println("°C)");
+  }
+  
+  delay(100);
+}
+
+void requestEvent() {
+  // Quick LED flash
+  digitalWrite(LED_PIN, LOW);
+  
+  // Prepare and send data
+  uint8_t data[2];
+  data[0] = (last_adc_value >> 8) & 0xFF;  // High byte
+  data[1] = last_adc_value & 0xFF;         // Low byte
+  
+  Wire.write(data, 2);
+  
+  // LED off
+  digitalWrite(LED_PIN, HIGH);
+  
+  Serial.print("I2C Request! Sent: ");
+  Serial.println(last_adc_value);
+}

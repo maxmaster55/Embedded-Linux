@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+# Use the compiler from xTools
+set(CMAKE_CXX_COMPILER "/home/maxmaster/x-tools/aarch64-rpi3-linux-gnu/bin")
+
 # Project name and language
 project(TemperatureProject LANGUAGES CXX)
 

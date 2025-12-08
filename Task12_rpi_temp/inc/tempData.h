@@ -8,5 +8,6 @@ private:
 public:
     TempData();
     float read_temp();
+    void setTemp(int sensor_val);
     ~TempData();
 };

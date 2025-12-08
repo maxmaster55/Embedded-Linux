@@ -9,5 +9,6 @@ void Logger::logTemp(shared_ptr<TempData> td_ptr){
     }
 
     file << "the temp is: " << td_ptr->read_temp() << "\n";
+    file.flush();
 }
 
