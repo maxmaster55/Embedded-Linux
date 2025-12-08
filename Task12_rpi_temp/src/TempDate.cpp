@@ -4,6 +4,14 @@ TempData::TempData()
 {
 }
 
+
+float TempData::read_temp(){
+
+}
+
+
 TempData::~TempData()
 {
 }
+
+
