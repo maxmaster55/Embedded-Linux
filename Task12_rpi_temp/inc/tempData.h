@@ -4,10 +4,11 @@
 class TempData
 {
 private:
-    float data;
+    float temp_data;
+    float hum_data;
 public:
-    TempData();
-    float read_temp();
-    void setTemp(int sensor_val);
-    ~TempData();
+    float read_temperature();
+    float read_humidity();
+    void set_temperature(int sensor_val);
+    void set_humidity(int sensor_val);
 };
