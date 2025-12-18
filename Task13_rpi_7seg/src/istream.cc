@@ -10,7 +10,7 @@ IStream::IStream(std::string name, std::istream& in_stream)
 }
 
 
-std::istream& IStream::operator >>(int digit)
+std::istream& IStream::operator >>(int& digit)
 {
     std::cout << "Please write the digit\n";
     in >> digit;
