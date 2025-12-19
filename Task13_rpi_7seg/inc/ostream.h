@@ -3,11 +3,11 @@
 
 class OStream: virtual public MyStream
 {
-private:
+protected:
     std::ostream& out;
 public:
     OStream(std::ostream& out_stream);
-
-    std::ostream& operator <<(std::string& outstring);
+    virtual void write_digit(int digit) = 0;
+    virtual std::ostream& operator <<(int digit);
     ~OStream();
 };

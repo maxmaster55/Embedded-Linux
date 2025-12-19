@@ -4,10 +4,10 @@
 
 class IStream: virtual public MyStream
 {
-private:
+protected:
     std::istream& in;
 public:
     IStream(std::istream& in_stream);
-    std::istream& operator >>(int& digit);
+    virtual std::istream& operator >>(int& digit);
     ~IStream();
 };

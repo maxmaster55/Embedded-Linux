@@ -33,7 +33,7 @@ SevenSegment::SevenSegment(std::array<int, 7> pins, std::istream& in, std::ostre
 
 void SevenSegment::write_digit(int digit)
 {
-    if (digit > 9 || digit < 0) throw std::invalid_argument("invalid digit");
+    if (digit > 9 || digit < 0) throw std::invalid_argument("invalid digit, use from 0 to 9");
     current_num = digit;
 
     for (int i = 0; i < 7; i++)
@@ -42,6 +42,19 @@ void SevenSegment::write_digit(int digit)
         hw_pins[i] << on;
     }
     
+}
+
+std::istream& SevenSegment::operator >>(int& digit)
+{
+    std::cout << "Please write the digit\n";
+    in >> digit;
+    return in;
+}
+
+std::ostream& SevenSegment::operator <<(int digit){
+    write_digit(digit);
+    out << "on the display now is: "<< digit << std::endl;
+    return out;
 }
 
 SevenSegment::~SevenSegment()

@@ -6,10 +6,9 @@ OStream::OStream(std::ostream& out_stream): out(out_stream)
 }
 
 
-std::ostream& OStream::operator <<(std::string& outstring)
+std::ostream& OStream::operator <<(int digit)
 {
-    /*read from fd the contents and save it in outstring */
-    out << outstring;
+    out << digit;
     return out;
 }
 

@@ -12,7 +12,6 @@ std::istream& IStream::operator >>(int& digit)
 {
     std::cout << "Please write the digit\n";
     in >> digit;
-    /*write on fd*/
     return in;
 }
 

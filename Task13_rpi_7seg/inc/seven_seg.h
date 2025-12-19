@@ -13,7 +13,9 @@ private:
     std::array<mypin, 7> hw_pins;
 public:
     SevenSegment(std::array<int, 7> pins, std::istream& in, std::ostream& out);
-    void write_digit(int digit);
+    void write_digit(int digit) override;
+    std::ostream& operator <<(int digit) override;
+    std::istream& operator >>(int& digit) override;
     ~SevenSegment();
 };
 
