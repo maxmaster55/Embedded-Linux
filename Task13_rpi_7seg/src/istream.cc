@@ -2,9 +2,7 @@
 
 
 
-IStream::IStream(std::string name, std::istream& in_stream)
-    :MyStream(name),
-    in(in_stream)
+IStream::IStream(std::istream& in_stream): in(in_stream)
 {
     std::cout<<"from IStream\n";
 }

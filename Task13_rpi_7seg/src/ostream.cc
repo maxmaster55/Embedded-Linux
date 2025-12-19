@@ -1,8 +1,6 @@
 #include <ostream.h>
 
-OStream::OStream(std::string name, std::ostream& out_stream)
-    :MyStream(name),
-    out(out_stream)
+OStream::OStream(std::ostream& out_stream): out(out_stream)
 {
     std::cout<<"from OStream\n";
 }

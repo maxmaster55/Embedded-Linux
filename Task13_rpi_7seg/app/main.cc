@@ -1,21 +1,17 @@
 #include <iostream>
-#include "stream.h"
-#include "istream.h"
-#include "ostream.h"
+#include "seven_seg.h"
+
 
 
 int main(int argc, char const *argv[])
 {
 
-    OStream to("test_out", std::cout);
-    IStream from("test_in", std::cin);
+    SevenSegment display({1, 2, 3, 4, 5, 6, 7}, std::cin, std::cout);
 
-    int x = 6;
+    display.write_digit(5);
 
-    from >> x;
-
-    auto str = std::to_string(x);
-
-    to << str << std::endl;
+    int x;
+    display >> x;
+    std::cout<< x << "\n";
     return 0;
 }

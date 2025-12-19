@@ -19,6 +19,7 @@ private:
     int fd;
     int pin_num;
 public:
+    mypin() = default;
     mypin(int num, pin_mode_t _mode);
     void operator<<(int val);
     void operator>>(int& val);
