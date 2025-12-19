@@ -56,7 +56,6 @@ mypin::~mypin()
     fd = open(unex.c_str(), O_WRONLY);
     if (fd < 0) {
         perror("error opening unexport file");
-        throw std::runtime_error("system call failed");
         return;
     }
     string to_stop = to_string(pin_num);

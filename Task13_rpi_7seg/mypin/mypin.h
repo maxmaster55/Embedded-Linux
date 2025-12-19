@@ -23,6 +23,6 @@ public:
     mypin(int num, pin_mode_t _mode);
     void operator<<(int val);
     void operator>>(int& val);
-    ~mypin();
+    ~mypin() noexcept;
 };
 
