@@ -38,8 +38,10 @@ mypin::mypin(int num, pin_mode_t _mode)
     if (mode == mode_read)
     { 
         fd = open(value_path.c_str(), O_RDONLY);
+        std::cout<<"read mode\n";
     }else{
         fd = open(value_path.c_str(), O_WRONLY);
+        std::cout<<"write mode\n";
     }
 
     if (fd < 0) {
@@ -49,9 +51,36 @@ mypin::mypin(int num, pin_mode_t _mode)
     }
 }
 
+mypin::mypin(mypin&& other) noexcept
+{
+    pin_num = other.pin_num;
+    fd = other.fd;
+    mode = other.mode;
+    other.fd = -1;
+}
+
+mypin& mypin::operator=(mypin&& other) noexcept
+{
+    if (this != &other) {
+        if (fd >= 0)
+            close(fd);
+
+        pin_num = other.pin_num;
+        fd = other.fd;
+        mode = other.mode;
+        other.fd = -1;
+    }
+    return *this;
+}
+
+
 mypin::~mypin()
 {
+    if (fd < 0)
+        return;
+    std::cout<<"closing pin\n";
     close(fd);
+    
     string unex = "/sys/class/gpio/unexport";
     fd = open(unex.c_str(), O_WRONLY);
     if (fd < 0) {

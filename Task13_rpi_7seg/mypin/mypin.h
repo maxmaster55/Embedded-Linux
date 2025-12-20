@@ -21,6 +21,13 @@ private:
 public:
     mypin() = default;
     mypin(int num, pin_mode_t _mode);
+
+    mypin(const mypin&) = delete;
+    mypin& operator=(const mypin&) = delete;
+
+    mypin(mypin&&) noexcept;
+    mypin& operator=(mypin&&) noexcept;
+    
     void operator<<(int val);
     void operator>>(int& val);
     ~mypin() noexcept;
