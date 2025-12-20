@@ -16,7 +16,6 @@ public:
     SevenSegment(std::array<int, 7> pins, bool active_high, std::istream& in, std::ostream& out);
     void write_digit(int digit) override;
     std::ostream& operator <<(int digit) override;
-    std::istream& operator >>(int& digit) override;
     ~SevenSegment();
 };
 

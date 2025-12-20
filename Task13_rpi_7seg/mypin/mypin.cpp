@@ -8,11 +8,9 @@ mypin::mypin(int num, pin_mode_t _mode)
 {
     pin_num = num + 512;
     mode = _mode;
-    std::cout << num <<"=>" <<pin_num<< "\n";
     fd = open("/sys/class/gpio/export", O_WRONLY);
     if (fd < 0)
     {
-        perror("error opening the file");
         throw std::runtime_error("system call failed");
     }
     
@@ -23,7 +21,6 @@ mypin::mypin(int num, pin_mode_t _mode)
     string dir_path = "/sys/class/gpio/gpio" + to_string(pin_num) + "/direction";
     fd = open(dir_path.c_str(), O_WRONLY);
     if (fd < 0) {
-        perror("error opening direction");
         throw std::runtime_error("system call failed");
         return;
     }
@@ -38,14 +35,11 @@ mypin::mypin(int num, pin_mode_t _mode)
     if (mode == mode_read)
     { 
         fd = open(value_path.c_str(), O_RDONLY);
-        std::cout<<"read mode\n";
     }else{
         fd = open(value_path.c_str(), O_WRONLY);
-        std::cout<<"write mode\n";
     }
 
     if (fd < 0) {
-        perror("error opening value");
         throw std::runtime_error("system call failed");
         return;
     }
@@ -95,7 +89,6 @@ mypin& mypin::operator=(mypin&& other) noexcept
 void mypin::operator<<(int val){
     if (mode != mode_write)
     {
-        std::cout << "You can't write to a pin in read mode\n";
         throw std::runtime_error("system call failed");
         return;
     }
@@ -106,7 +99,6 @@ void mypin::operator<<(int val){
 void mypin::operator>>(int& val){
     if (mode != mode_read)
     {
-        std::cout << "You can't read from a pin in write mode\n";
         throw std::runtime_error("system call failed");
         return;
     }
@@ -114,7 +106,6 @@ void mypin::operator>>(int& val){
     char buff[2];
     lseek(fd, 0, SEEK_SET);      // rewind
     if (read(fd, buff, 2) < 0) {
-        perror("error reading value");
         close(fd);
         throw std::runtime_error("system call failed");
         return;

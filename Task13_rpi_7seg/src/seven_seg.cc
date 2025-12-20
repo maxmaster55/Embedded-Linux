@@ -14,30 +14,18 @@ constexpr std::array<int, 10> seven_seg_lut = {
 };
 
 SevenSegment::SevenSegment(std::array<int, 7> pins, bool active_high, std::istream& in, std::ostream& out)
-:IStream(in), OStream(out)
+:IStream(in), OStream(out), active_high(active_high), current_num(0),
+hw_pins({
+    mypin(pins[0], pin_mode_t::mode_write),
+    mypin(pins[1], pin_mode_t::mode_write),
+    mypin(pins[2], pin_mode_t::mode_write),
+    mypin(pins[3], pin_mode_t::mode_write),
+    mypin(pins[4], pin_mode_t::mode_write),
+    mypin(pins[5], pin_mode_t::mode_write),
+    mypin(pins[6], pin_mode_t::mode_write)
+})
 {
-    this->active_high = active_high;
-    for (int i = 0; i < 7; i++)
-    {
-        if (pins[i] < 0)
-        {
-            throw std::invalid_argument("negative pin number");
-        }
-
-        hw_pins[i] = mypin(pins[i], mode_write);
-    }
-    if (active_high)
-    {
-        for (int i = 0; i < 7; i++) {
-            hw_pins[i] << 0;   // OFF (active high)
-        }
-    }else{
-        for (int i = 0; i < 7; i++) {
-            hw_pins[i] << 1;   // OFF (active low)
-        }
-    }
-
-
+    // Initialization done in member initializer list
 }
 
 
@@ -48,7 +36,6 @@ void SevenSegment::write_digit(int digit)
 
     for (int i = 0; i < 7; i++)
     {
-        // active low
         if (active_high)
         {
             bool on = ((seven_seg_lut[digit] >> i) & 0x1);
@@ -63,12 +50,6 @@ void SevenSegment::write_digit(int digit)
     
 }
 
-std::istream& SevenSegment::operator >>(int& digit)
-{
-    std::cout << "Please write the digit\n";
-    in >> digit;
-    return in;
-}
 
 std::ostream& SevenSegment::operator <<(int digit){
     write_digit(digit);
