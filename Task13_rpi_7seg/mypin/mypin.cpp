@@ -74,23 +74,23 @@ mypin& mypin::operator=(mypin&& other) noexcept
 }
 
 
-mypin::~mypin()
-{
-    if (fd < 0)
-        return;
-    std::cout<<"closing pin\n";
-    close(fd);
+// mypin::~mypin()
+// {
+//     if (fd < 0)
+//         return;
+//     std::cout<<"closing pin\n";
+//     close(fd);
     
-    string unex = "/sys/class/gpio/unexport";
-    fd = open(unex.c_str(), O_WRONLY);
-    if (fd < 0) {
-        perror("error opening unexport file");
-        return;
-    }
-    string to_stop = to_string(pin_num);
-    write(fd, to_stop.c_str(), to_stop.size());
-    close(fd);
-}
+//     string unex = "/sys/class/gpio/unexport";
+//     fd = open(unex.c_str(), O_WRONLY);
+//     if (fd < 0) {
+//         perror("error opening unexport file");
+//         return;
+//     }
+//     string to_stop = to_string(pin_num);
+//     write(fd, to_stop.c_str(), to_stop.size());
+//     close(fd);
+// }
 
 void mypin::operator<<(int val){
     if (mode != mode_write)

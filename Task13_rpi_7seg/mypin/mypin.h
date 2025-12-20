@@ -30,6 +30,5 @@ public:
     
     void operator<<(int val);
     void operator>>(int& val);
-    ~mypin() noexcept;
 };
 

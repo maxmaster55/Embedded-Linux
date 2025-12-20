@@ -2,15 +2,15 @@
 
 constexpr std::array<int, 10> seven_seg_lut = {
     0b00111111, // 0 → a b c d e f
-    0b00000110, // 1 → b c
-    0b01011011, // 2 → a b d e g
-    0b01001111, // 3 → a b c d g
-    0b01100110, // 4 → b c f g
-    0b01101101, // 5 → a c d f g
-    0b01111101, // 6 → a c d e f g
+    0b00000110, // 1 →     b c
+    0b01011011, // 2 → a b   d e   g
+    0b01001111, // 3 → a b c d     g
+    0b01100110, // 4 →   b c     f g
+    0b01101101, // 5 → a   c d   f g
+    0b01111101, // 6 → a   c d e f g
     0b00000111, // 7 → a b c
-    0b01111111, // 8 → all
-    0b01101111  // 9 → a b c d f g
+    0b01111111, // 8 → a b c d e f g
+    0b01101111  // 9 → a b c d   f g
 };
 
 SevenSegment::SevenSegment(std::array<int, 7> pins, bool active_high, std::istream& in, std::ostream& out)
@@ -24,7 +24,7 @@ SevenSegment::SevenSegment(std::array<int, 7> pins, bool active_high, std::istre
             throw std::invalid_argument("negative pin number");
         }
 
-        hw_pins[i] = std::move(mypin(pins[i], mode_write));
+        hw_pins[i] = mypin(pins[i], mode_write);
     }
     if (active_high)
     {
