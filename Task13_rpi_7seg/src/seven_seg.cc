@@ -13,9 +13,10 @@ constexpr std::array<int, 10> seven_seg_lut = {
     0b01101111  // 9 → a b c d f g
 };
 
-SevenSegment::SevenSegment(std::array<int, 7> pins, std::istream& in, std::ostream& out)
+SevenSegment::SevenSegment(std::array<int, 7> pins, bool active_high, std::istream& in, std::ostream& out)
 :IStream(in), OStream(out)
 {
+    this->active_high = active_high;
     for (int i = 0; i < 7; i++)
     {
         if (pins[i] < 0)
@@ -23,9 +24,18 @@ SevenSegment::SevenSegment(std::array<int, 7> pins, std::istream& in, std::ostre
             throw std::invalid_argument("negative pin number");
         }
 
-        hw_pins[i] = mypin(pins[i], mode_write);
+        hw_pins[i] = std::move(mypin(pins[i], mode_write));
     }
-
+    if (active_high)
+    {
+        for (int i = 0; i < 7; i++) {
+            hw_pins[i] << 0;   // OFF (active high)
+        }
+    }else{
+        for (int i = 0; i < 7; i++) {
+            hw_pins[i] << 1;   // OFF (active low)
+        }
+    }
 
 
 }
@@ -38,8 +48,17 @@ void SevenSegment::write_digit(int digit)
 
     for (int i = 0; i < 7; i++)
     {
-        bool on = (seven_seg_lut[digit] >> i) & 0x1;
-        hw_pins[i] << on;
+        // active low
+        if (active_high)
+        {
+            bool on = ((seven_seg_lut[digit] >> i) & 0x1);
+            hw_pins[i] << on;
+        }else{
+            bool on = !((seven_seg_lut[digit] >> i) & 0x1);
+            hw_pins[i] << on;
+        }
+        
+
     }
     
 }
