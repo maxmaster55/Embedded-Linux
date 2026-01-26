@@ -14,18 +14,25 @@ constexpr std::array<int, 10> seven_seg_lut = {
 };
 
 SevenSegment::SevenSegment(std::array<int, 7> pins, bool active_high, std::istream& in, std::ostream& out)
-:IStream(in), OStream(out), active_high(active_high), current_num(0),
-hw_pins({
-    mypin(pins[0], pin_mode_t::mode_write),
-    mypin(pins[1], pin_mode_t::mode_write),
-    mypin(pins[2], pin_mode_t::mode_write),
-    mypin(pins[3], pin_mode_t::mode_write),
-    mypin(pins[4], pin_mode_t::mode_write),
-    mypin(pins[5], pin_mode_t::mode_write),
-    mypin(pins[6], pin_mode_t::mode_write)
-})
+:IStream(in), OStream(out), active_high(active_high), current_num(0)
 {
+
+//     hw_pins({
+//     mypin(pins[0], pin_mode_t::mode_write),
+//     mypin(pins[1], pin_mode_t::mode_write),
+//     mypin(pins[2], pin_mode_t::mode_write),
+//     mypin(pins[3], pin_mode_t::mode_write),
+//     mypin(pins[4], pin_mode_t::mode_write),
+//     mypin(pins[5], pin_mode_t::mode_write),
+//     mypin(pins[6], pin_mode_t::mode_write)
+// })
     // Initialization done in member initializer list
+    for (int i = 0; i < 7; i++)
+    {
+        
+        this->hw_pins[i] = mypin(pins[i], pin_mode_t::mode_write);
+    }
+    
 }
 
 
