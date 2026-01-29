@@ -1,0 +1,28 @@
+{
+    "unicast": "134.86.56.94",
+    "logging": {
+        "level": "debug",
+        "console": "true"
+    },
+    "applications": [
+        {
+            "name": "CapsLK_service",
+            "id": "0x1"
+        },
+        {
+            "name": "CapsLK_client",
+            "id": "0x2"
+        }
+    ],
+    "services": [
+        {
+            "service": "0x4666",
+            "instance": "0x1",
+            "unreliable": "30509"
+        }
+    ],
+    "routing": "CapsLK_service",
+    "service-discovery": {
+        "enable": "false"
+    }
+}
