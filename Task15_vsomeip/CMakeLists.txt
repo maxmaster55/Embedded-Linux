@@ -10,13 +10,13 @@ find_package(vsomeip3 REQUIRED)
 
 
 add_executable(CapsLK_service 
-    CapsLK_service_main.cpp
+    CapsLK_service.cpp
     )
 target_link_libraries(CapsLK_service PRIVATE vsomeip3 )
 
 
 add_executable(CapsLK_client
-    CapsLK_client_main.cpp
+    CapsLK_client.cpp
 )
 target_link_libraries(CapsLK_client PRIVATE vsomeip3 )
 
