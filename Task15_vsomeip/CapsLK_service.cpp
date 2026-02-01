@@ -1,8 +1,10 @@
 #include <vsomeip/vsomeip.hpp>
 #include <iostream>
+#include <fstream>
 #include <csignal>
 
-constexpr static auto APP_NAME = "Hello_Service";
+constexpr static auto CAPSLK_PATH = "/sys/class/leds/input9::capslock/brightness";
+constexpr static auto APP_NAME = "CapsLK_service";
 
 constexpr int SERVICE_ID = 0xAAAA;
 constexpr int INSTANCE_ID = 0x01;
@@ -65,6 +67,7 @@ void hello_message_handler(const std::shared_ptr<vsomeip::message>& _request)
 
 void capslock_message_handler(const std::shared_ptr<vsomeip::message>& _request)
 {
+    static int count = 0;
     std::cout << "CapsLock Message received with payload length: "
               << _request->get_payload()->get_length() << std::endl;
 
@@ -79,18 +82,43 @@ void capslock_message_handler(const std::shared_ptr<vsomeip::message>& _request)
     // Create payload for the response
     std::shared_ptr<vsomeip::payload> payload =
         vsomeip::runtime::get()->create_payload();
-    std::vector<vsomeip::byte_t> data = {4, 5, 6};
+    std::string message;
+
+    // Toggle Caps Lock LED
+    int brightness = (count % 2 == 0) ? 1 : 0;
+    std::ofstream capslock_file(CAPSLK_PATH);
+    if(capslock_file.is_open())
+    {
+        std::string str = (brightness ? "ON" : "OFF");
+        capslock_file << brightness;
+        capslock_file.close();
+        std::cout << "Caps Lock LED set to " << str << std::endl;
+        message = "capslock: " +  str + "\n";
+    }
+    else
+    {
+        std::cerr << "Failed to open Caps Lock LED file." << std::endl;
+        message = "capslock: ERROR\n";
+    }
+
+    std::vector<vsomeip::byte_t> data(message.begin(), message.end());
     payload->set_data(data);
     response->set_payload(payload);
 
     // Send the response
     vsomeip::runtime::get()->get_application(APP_NAME)->send(response);
+    count++;
 }
 
 
 
 int main(int argc, char **argv)
 {
+
+    // signal handling
+    std::signal(SIGINT, signal_handler);
+    std::signal(SIGTERM, signal_handler);
+
     std::shared_ptr<vsomeip::runtime> rtm = vsomeip::runtime::get();
     std::shared_ptr<vsomeip::application> app = rtm->create_application(APP_NAME);
    
