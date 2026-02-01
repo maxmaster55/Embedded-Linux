@@ -16,8 +16,8 @@
     ],
     "services": [
         {
-            "service": "0x4666",
-            "instance": "0x1",
+            "service": "0xAAAA",
+            "instance": "0x01",
             "unreliable": "30509"
         }
     ],
