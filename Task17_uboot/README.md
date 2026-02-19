@@ -94,4 +94,4 @@ done via menuconfig 46
 ### Add a custom command hello that prints your name
 
 
-![alt text](imgs/image.png)
+![alt text](imgs/image1.png)
