@@ -95,3 +95,34 @@ done via menuconfig 46
 
 
 ![alt text](imgs/image1.png)
+
+
+### Network Booting with TFTP
+
+- Set Up a TFTP Server on Your Laptop
+    ```bash
+    mkdir /srv/tftp
+    sudo apt install tftpd-hpa
+    sudo chown -R tftp:tftp /srv/tftp
+    sudo chmod -R 755 /srv/tftp
+    sudo systemctl restart tftpd-hpa
+    sudo systemctl status tftpd-hpa
+    ```
+- From U-Boot
+    ```bash
+    setenv serverip 192.168.2.1   # PC IP
+    setenv ipaddr 192.168.2.2      # rpi IP
+    tftp $kernel_addr_r rpi _app
+    ```
+
+### What is the difference between run and go commands?
+- run: executes a U-Boot environment variable as a command.
+
+- go: jumps to an address in RAM and starts executing code there.
+
+### What is the purpose of bootargs and who reads it?
+- it is an environment variable used to pass parameters to the Linux kernel when it boots.
+- the kernel reads it.
+
+### Why do we use 0x62000000 and not 0x60000000 for kernel address on Raspberry Pi?
+- i didn't, but i imagine we don't because the 2nd one might be reserved.
