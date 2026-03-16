@@ -6,7 +6,11 @@
 ./q_run.sh  # to run qemu 
 ```
 
-![qumu gui image](image.png)
+image from rpi emulator:
+![qumu gui image](images/image.png)
+
+image from vexpress with BusyBox
+![qumu gui image](images/print.png)
 
 some commands to laod the images
 

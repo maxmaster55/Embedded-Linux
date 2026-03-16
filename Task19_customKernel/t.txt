@@ -1,0 +1,63 @@
+Early malloc usage: 574 / 800
+=> echo $bootargs 
+console=tty0 console=ttyAMA0,38400n8
+=> setenv boot    
+  boot_a_script boot_efi_binary boot_efi_bootmgr boot_extlinux boot_prefixes
+  boot_script_dhcp boot_scripts boot_syslinux_conf boot_targets bootargs
+  bootcmd bootcmd_dhcp bootcmd_mmc0 bootcmd_mmc1 bootcmd_pxe bootdelay
+  bootflash
+=> setenv bootargs "console=tty0 console=ttyAMA0,38400n8 root=/dev/mmcblk0p2 rootwait rw rootdelay=2"
+=> saveenv 
+Saving Environment to MMC... Writing to MMC(0)... OK
+setenv loadkernel "fatload mmc 0:1 $kernel_addr_r zImage"
+setenv loaddtb "fatload mmc 0:1 $fdt_addr_r vexpress-v2p-ca9.dtb"
+saveenv 
+Saving Environment to MMC... Writing to MMC(0)... OK
+=> echo $bootcmd
+run distro_bootcmd; run bootflash
+=> setenv bootcmd "run loaddtb; run loadkernel;bootz"  
+=> bootz
+zimage: Bad magic!
+=> bootz ?
+zimage: Bad magic!
+=> help bootz
+bootz - boot Linux zImage image from memory
+
+Usage:
+bootz [addr [initrd[:size]] [fdt]]
+    - boot Linux zImage stored in memory
+	The argument 'initrd' is optional and specifies the address
+	of the initrd in memory. The optional argument ':size' allows
+	specifying the size of RAW initrd.
+	When booting a Linux kernel which requires a flat device-tree
+	a third argument is required which is the address of the
+	device-tree blob. To boot that kernel without an initrd image,
+	use a '-' for the second argument. If you do not pass a third
+	a bd_info struct will be passed instead
+
+=> setenv bootcmd "run loaddtb; run loadkernel;bootz $kernel_addr_r - $fdt_addr_r" 
+=> saveenv 
+Saving Environment to MMC... Writing to MMC(0)... OK
+=> run bo 
+  board board_name boot_a_script boot_efi_bootmgr boot_extlinux boot_prefixes
+  boot_script_dhcp boot_scripts boot_syslinux_conf boot_targets bootargs
+  bootcmd bootcmd_dhcp bootcmd_mmc0 bootcmd_mmc1 bootcmd_pxe bootdelay
+  bootflash ...
+=> run boot
+  boot_a_script boot_efi_binary boot_efi_bootmgr boot_extlinux boot_prefixes
+  boot_script_dhcp boot_scripts boot_syslinux_conf boot_targets bootargs
+  bootcmd bootcmd_dhcp bootcmd_mmc0 bootcmd_mmc1 bootcmd_pxe bootdelay
+  bootflash
+=> run bootcmd
+** No partition table - mmc 0 **
+Couldn't find partition mmc 0:1
+Can't set block device
+** No partition table - mmc 0 **
+Couldn't find partition mmc 0:1
+Can't set block device
+zimage: Bad magic!
+=> ls mmc 0:1
+** No partition table - mmc 0 **
+Couldn't find partition mmc 0:1
+=> 
+
