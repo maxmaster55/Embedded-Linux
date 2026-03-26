@@ -1,0 +1,15 @@
+qemu-system-aarch64 \
+    -M raspi3b \
+    -cpu cortex-a53 \
+    -m 1G \
+    -kernel u-boot.bin \
+    -dtb bcm2837-rpi-3-b-plus.dtb \
+    -drive format=raw,file=vsd.img,if=sd \
+    -serial stdio \
+    -serial null \
+    -display gtk,zoom-to-fit=on \
+    -usb \
+    -device usb-kbd,bus=usb-bus.0 \
+    -device usb-tablet,bus=usb-bus.0 \
+    -netdev user,id=net0,hostfwd=tcp::2222-:22 \
+    -device usb-net,netdev=net0,bus=usb-bus.0 
