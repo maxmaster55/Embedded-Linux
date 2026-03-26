@@ -4,7 +4,13 @@ qemu-system-aarch64 \
     -m 1G \
     -kernel Image \
     -dtb bcm2710-rpi-3-b-plus.dtb \
-    -sd sdcard.img \
-    -nographic \
-    -monitor none \
-    -append "root=/dev/mmcblk0p2 rootwait rw console=ttyAMA0,115200 earlycon=pl011,0x3f201000 loglevel=8"
+    -drive format=raw,file=sdcard.img,if=sd \
+    -serial stdio \
+    -serial null \
+    -display gtk,zoom-to-fit=on \
+    -usb \
+    -device usb-kbd,bus=usb-bus.0 \
+    -device usb-tablet,bus=usb-bus.0 \
+    -netdev user,id=net0,hostfwd=tcp::2222-:22 \
+    -device usb-net,netdev=net0,bus=usb-bus.0 \
+    -append "root=/dev/mmcblk0p2 rootwait rw console=ttyAMA0,115200 video=HDMI-A-1:1280x720@60"
