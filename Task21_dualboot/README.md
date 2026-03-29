@@ -1,5 +1,10 @@
 # DualBoot Task
 
+## boot images
+
+![root 1](images/image1.png)
+![root 2](images/image2.png)
+
 ## commands used
 
 ### creating initramfs
