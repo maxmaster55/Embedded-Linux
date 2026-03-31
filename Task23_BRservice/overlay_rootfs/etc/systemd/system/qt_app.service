@@ -1,0 +1,15 @@
+[Unit]
+Description=Qt Application (calculator)
+Requires=media-loop_dev.mount get_ready.service
+After=media-loop_dev.mount get_ready.service
+
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/echo "Starting Qt Application (calculator)..."
+ExecStartPre=/usr/bin/cat  /media/loop_dev/cat
+
+ExecStart=/usr/bin/appt02_calc
+
+[Install]
+WantedBy=myapp.target

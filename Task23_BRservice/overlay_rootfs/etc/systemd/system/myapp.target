@@ -1,0 +1,8 @@
+[Unit]
+Description=My Application Target
+# Requires=get_ready.service media-loop_dev.mount systemd-networkd.service
+# After=get_ready.service media-loop_dev.mount systemd-networkd.service network-online.target
+
+
+[Install]
+WantedBy=multi-user.target

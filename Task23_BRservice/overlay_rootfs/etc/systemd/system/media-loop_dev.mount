@@ -1,0 +1,12 @@
+# media-loop_dev.mount
+[Unit]
+Description=Mount loop device to /media/loop_dev
+
+[Mount]
+What=/cat.img
+Where=/media/loop_dev
+Type=vfat
+Options=loop,ro
+
+[Install]
+WantedBy=myapp.target
