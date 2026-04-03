@@ -1,0 +1,95 @@
+#!/bin/sh
+
+# ============================================================
+#  initramfs boot selector
+# ============================================================
+
+# --- redirect console ---
+exec </dev/console >/dev/console 2>&1
+
+# --- mount essential virtual filesystems ---
+mount -t devtmpfs devtmpfs /dev
+mount -t proc     proc     /proc
+mount -t sysfs    sysfs    /sys
+mount -t tmpfs    tmpfs    /tmp
+
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts
+
+# --- welcome message ---
+echo ""
+echo "==============================="
+echo "   initramfs boot selector"
+echo "==============================="
+echo ""
+echo "Kernel cmdline:"
+cat /proc/cmdline
+echo ""
+
+# --- user selection ---
+while true; do
+    echo "Select boot option:"
+    echo "  1) Boot mmcblk0p2"
+    echo "  2) Boot mmcblk0p3"
+    echo "  3) Recovery shell (initramfs)"
+    echo ""
+    printf "Choice: "
+    read choice
+
+    case "$choice" in
+        1) ROOT_DEV=/dev/mmcblk0p2 ; MODE=boot     ; break ;;
+        2) ROOT_DEV=/dev/mmcblk0p3 ; MODE=boot     ; break ;;
+        3)                           MODE=recovery  ; break ;;
+        *) echo "  Invalid choice, try again..." ; echo "" ;;
+    esac
+done
+
+# --- recovery mode ---
+if [ "$MODE" = "recovery" ]; then
+    echo ""
+    echo "Entering recovery shell..."
+    exec sh
+fi
+
+echo ""
+echo "Selected: $ROOT_DEV"
+
+# --- wait for device ---
+echo "Waiting for $ROOT_DEV..."
+while [ ! -e "$ROOT_DEV" ]; do
+    sleep 1
+done
+echo "Device found."
+
+# --- mount root filesystem ---
+mkdir -p /newroot
+echo "Mounting root filesystem..."
+mount "$ROOT_DEV" /newroot || {
+    echo ""
+    echo "ERROR: Mount failed!"
+    exec sh
+}
+echo "Mounted successfully."
+
+# --- prepare mount points in new root ---
+mkdir -p /newroot/proc /newroot/sys /newroot/dev
+
+# --- move proc into new root (dev and sys handled by new init) ---
+mount --move /proc /newroot/proc
+
+# --- sanity check ---
+if [ ! -x /newroot/sbin/init ]; then
+    echo ""
+    echo "ERROR: No /sbin/init found in rootfs!"
+    exec sh
+fi
+
+# --- switch root ---
+echo ""
+echo "Switching root to $ROOT_DEV..."
+exec switch_root -c /dev/console /newroot /sbin/init
+
+# --- should never reach here ---
+echo ""
+echo "ERROR: switch_root failed!"
+exec sh
