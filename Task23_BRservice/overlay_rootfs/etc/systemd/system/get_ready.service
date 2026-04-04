@@ -1,9 +1,11 @@
 [Unit]
 Description=Get Application Ready
-Requires=systemd-networkd.service
-After=systemd-networkd.service network-online.target
+After=default.target
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/echo "Application is getting ready..."
 
+
+[Install]
+WantedBy=myapp.target

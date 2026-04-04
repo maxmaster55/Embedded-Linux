@@ -7,9 +7,12 @@ After=media-loop_dev.mount get_ready.service
 [Service]
 Type=simple
 ExecStartPre=/usr/bin/echo "Starting Qt Application (calculator)..."
-ExecStartPre=/usr/bin/cat  /media/loop_dev/cat
+ExecStartPre=/usr/bin/cat  /media/loop_dev/cat_pic
 
-ExecStart=/usr/bin/appt02_calc
+ExecStart=/home/maxmaster/data/ITI/qt_course/tasks/t02_calc/build/appt02_calc
+
+# start again if it fails
+Restart=on-failure
 
 [Install]
 WantedBy=myapp.target

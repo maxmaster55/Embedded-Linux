@@ -3,7 +3,7 @@
 Description=Mount loop device to /media/loop_dev
 
 [Mount]
-What=/cat.img
+What=/home/maxmaster/data/ITI/Embedded-Linux/Task23_BRservice/cat.img
 Where=/media/loop_dev
 Type=vfat
 Options=loop,ro
